@@ -1,5 +1,5 @@
 ---
-title: "Home Credit Default Risk Analysis"
+title: "Rule-Based Data Binning for Credit Risk Modeling in R"
 format:
   html:
     toc: true
