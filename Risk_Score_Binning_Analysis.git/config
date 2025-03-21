@@ -1,0 +1,10 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = git@github.com:kritika966/Risk_Score_Binning_Analysis.git
+	fetch = +refs/*:refs/*
+	mirror = true
