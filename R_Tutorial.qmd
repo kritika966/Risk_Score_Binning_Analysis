@@ -73,7 +73,7 @@ library(dplyr)
 ## Load Dataset
 
 ```{r}
-# Replace the file path with your dataset location
+# Read the CSV file into a DataFrame named 'data'
 data <- read_csv("application_train.csv")
 
 # Preview the data
@@ -239,6 +239,64 @@ predict(model_binned, newdata = new_client, type = "response")
 ```
 
 A customer in the "High" score bin has only a 3.05% chance of defaulting, confirming the low-risk nature of this group.
+
+# Other Binning Techniques
+
+In addition to rule-based binning, there are several other binning methods commonly used in data science:
+
+-   **Quantile Binning (Equal Frequency):** Divides data into bins with the same number of values (e.g., quartiles). Useful when the data is skewed.
+
+**Example:** If you split scores into 4 bins (quartiles):
+
+Top 25% - Q4
+
+Middle 25–50% - Q3
+
+50–75% - Q2
+
+Bottom 25% - Q1
+
+``` r
+cut(ext_score, breaks = quantile(ext_score, probs = seq(0, 1, 0.25)), include.lowest = TRUE)
+```
+
+-   **Equal-Width Binning:** Splits the full range of the variable into equal-sized intervals.
+
+**Example:** If EXT_SOURCE_1 ranges from 0 to 1 and we want 5 bins:
+
+Bin 1: 0.0–0.2
+
+Bin 2: 0.2–0.4
+
+Bin 3: 0.4–0.6
+
+Bin 4: 0.6–0.8
+
+Bin 5: 0.8–1.0
+
+``` r
+cut(ext_score, breaks = 5)
+```
+
+-   **Decision Tree Binning:** Uses a tree-based model to automatically find optimal split points based on the target (e.g., default or no default).
+
+**Example:** The tree might learn that people with EXT_SOURCE_1 ≤ 0.27 are high risk, and others are not. It makes data-driven cuts that maximize separation between defaulters and non-defaulters.
+
+**Requires: DecisionTreeClassifier() or similar**
+
+``` r
+library(rpart)
+rpart(TARGET ~ EXT_SOURCE_1, data = your_data)
+```
+
+-   **WOE Binning (Weight of Evidence):** Common in credit scoring. Converts features into values that show how well they separate defaulters from non-defaulters.
+
+**Example:** If 80% of people in a bin are defaulters, that bin gets a high WOE score. - Very useful in credit scoring and logistic regression. - Requires custom WOE function or libraries like optbinning, scorecardpy (R/Python)
+
+``` r
+library(scorecard)
+bins <- woebin(your_data, y = "TARGET", x = "EXT_SOURCE_1")
+```
 
 # Key Takeaway
 
